@@ -1,0 +1,18 @@
+from selenium.webdriver.common.by import By
+
+LOGIN_BUTTON_IN_HEADER = (By.CSS_SELECTOR, "[class^='responseHead-module-button']")
+AUTHORIZATION_FORM = (By.CSS_SELECTOR, "[class^=authForm-module-header]")
+EMAIL_FIELD = (By.CSS_SELECTOR, "[name=email]")
+PASSWORD_FIELD = (By.CSS_SELECTOR, "[name=password]")
+LOGIN_BUTTON_IN_AUTHORIZATION_FORM = (By.CSS_SELECTOR, "[class^=authForm-module-button]")
+USER_NAME_BUTTON = (By.CSS_SELECTOR, "[class^=right-module-userNameWrap]")
+SHOWN_RIGHT_MENU = (By.CSS_SELECTOR, "[class*='rightMenu-module-shownRightMenu']")
+LOGOUT_BUTTON = (By.CSS_SELECTOR, "[class^=rightMenu-module-rightMenuItem]:nth-child(2) a")
+PROFILE_BUTTON = (By.CSS_SELECTOR, "[class*='center-module-profile']")
+NAME_FIELD = (By.CSS_SELECTOR, ".js-contacts-field-name input")
+SAVE_BUTTON = (By.CSS_SELECTOR, ".button_submit")
+SUCCESS_NOTIFICATION = (By.CSS_SELECTOR, "._notification_success-bg")
+BILL_BUTTON = (By.CSS_SELECTOR, "[class*='center-module-billing']")
+PROFILE_CATEGORY_LABEL = (By.CSS_SELECTOR, ".profile__title span")
+BILL_CATEGORY_LABEL = (By.CSS_SELECTOR, ".deposit__payment-form__title")
+ERROR_MESSAGE = (By.CSS_SELECTOR, ".formMsg .formMsg_text")
