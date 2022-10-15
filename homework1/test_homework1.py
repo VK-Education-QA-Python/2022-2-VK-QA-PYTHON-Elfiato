@@ -54,14 +54,13 @@ def test_change_profile_information(driver):
 
 
 @pytest.mark.UI
-@pytest.mark.parametrize('locator, label, label_text',
-                         [(locators.PROFILE_BUTTON, locators.PROFILE_CATEGORY_LABEL, 'Контактная информация'),
-                          (locators.BILL_BUTTON, locators.BILL_CATEGORY_LABEL, 'ПЛАТЕЛЬЩИК')])
-def test_go_to_center_module_categories(driver, locator, label, label_text):
+@pytest.mark.parametrize('locator, label',
+                         [(locators.PROFILE_BUTTON, locators.PROFILE_CATEGORY_LABEL),
+                          (locators.BILL_BUTTON, locators.BILL_CATEGORY_LABEL)])
+def test_go_to_center_module_categories(driver, locator, label):
     page = Base(driver, MAIN_PAGE)
     page.open()
     page.login_func(LOGIN, PASSWORD)
     categories_button = page.get_clickable_element(*locator)
     categories_button.click()
-    text = page.get_present_element(*label).text
-    assert text == label_text, f'Переход в категорию с локатором {locator} не произведен.'
+    assert page.is_element_present(*label), f'Переход в категорию с локатором {locator} не произведен.'

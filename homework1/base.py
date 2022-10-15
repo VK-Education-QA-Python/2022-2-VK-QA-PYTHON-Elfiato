@@ -58,12 +58,10 @@ class Base:
     def login_func(self, login, password):
         login_button_in_header = self.get_present_element(*locators.LOGIN_BUTTON_IN_HEADER)
         login_button_in_header.click()
-        self.is_element_present(*locators.AUTHORIZATION_FORM)
         email_field = self.get_present_element(*locators.EMAIL_FIELD)
         email_field.clear()
         email_field.send_keys(login)
         password_field = self.get_present_element(*locators.PASSWORD_FIELD)
         password_field.clear()
         password_field.send_keys(password)
-        login_button_in_authorization_form = self.get_present_element(*locators.LOGIN_BUTTON_IN_AUTHORIZATION_FORM)
-        login_button_in_authorization_form.click()
+        self.get_present_element(*locators.LOGIN_BUTTON_IN_AUTHORIZATION_FORM).click()
