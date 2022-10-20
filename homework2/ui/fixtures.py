@@ -36,8 +36,8 @@ def driver(config, temp_dir):
     user_agent = ('chrome', '105.0.5195.19')
     if selenoid:
         capabilities = {
-            'browserName': config['user_agent'][0],
-            'version': config['user_agent'][1],
+            'browserName': 'chrome',
+            'version': '105.0.5195.19',
         }
         if vnc:
             capabilities['enableVNC'] = True
@@ -95,6 +95,4 @@ def get_cookies(tmp_path_factory, worker_id, config):
         else:
             data = cookies(config)
             fn.write_text(json.dumps(data))
-        # data = cookies(config)
-        # fn.write_text(json.dumps(data))
     return data

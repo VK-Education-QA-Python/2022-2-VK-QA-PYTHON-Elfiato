@@ -1,3 +1,5 @@
+import allure
+
 from ui.locators.basic_locators import SegmentsPageLocators
 from ui.pages.base_page import BasePage
 from ui.pages.creating_segment_page import CreatingSegmentPage
@@ -8,10 +10,12 @@ class SegmentsPage(BasePage):
     locators = SegmentsPageLocators
     url = 'https://target-sandbox.my.com/segments/segments_list'
 
+    @allure.step("Переход на страницу создания нового сегмента.")
     def go_to_creating_segment_page(self):
-        self.get_clickable_element(*self.locators.CREATE_SEGMENT_BUTTON).click()
+        self.get_visible_element(*self.locators.CREATE_SEGMENT_BUTTON).click()
         return CreatingSegmentPage(driver=self.driver)
 
+    @allure.step("Проверка на то, что сегмент создан.")
     def is_segment_create(self, segment_name):
         required_segment_id = None
         self.open_page()
@@ -27,6 +31,7 @@ class SegmentsPage(BasePage):
                 required_segment_id = segment_id
         return required_segment_id
 
+    @allure.step("Удаление сегмента.")
     def remove_segment(self, segment_id):
         remove_segment_locator_data_test = f'remove-{segment_id}'
         remove_segment_locator = f"[data-test^='{remove_segment_locator_data_test}'] span"

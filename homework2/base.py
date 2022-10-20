@@ -1,5 +1,4 @@
 import os
-import time
 
 import allure
 import pytest
@@ -56,13 +55,3 @@ class BaseCaseLogIn(BaseCase):
         self.dashboard_page: DashBoardPage = DashBoardPage(driver=driver)
         self.segment_page: SegmentsPage = SegmentsPage(driver=driver)
         self.group_list_page: GroupListPage = GroupListPage(driver=driver)
-
-    @staticmethod
-    def create_segment(creating_segment_page, category):
-        segment_name = 'Segm' + '_' + str(time.time())
-        category()
-        creating_segment_page.set_new_segment_checkbox_true()
-        creating_segment_page.click_submit_button()
-        creating_segment_page.input_name(segment_name)
-        creating_segment_page.create_new_segment()
-        return segment_name

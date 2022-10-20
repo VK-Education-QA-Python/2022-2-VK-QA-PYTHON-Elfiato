@@ -1,3 +1,5 @@
+import allure
+
 from ui.pages.base_page import BasePage
 from ui.locators.basic_locators import LoginPageLocators
 from ui.pages.dashboard_page import DashBoardPage
@@ -8,6 +10,7 @@ class LoginPage(BasePage):
     __login = 'jo.ry@mail.ru'
     __password = '12345A'
 
+    @allure.step("Авторизация.")
     def login(self):
         email_field = self.get_present_element(*self.locators.EMAIL_FIELD)
         email_field.clear()
