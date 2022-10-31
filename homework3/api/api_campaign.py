@@ -9,8 +9,10 @@ class ApiCampaign(ApiClient):
     def post_picture(self, picture_name):
         send_picture_link = 'https://target-sandbox.my.com/api/v2/content/static.json'
 
-        base_dir = '\\'.join(os.path.abspath(os.path.dirname(__file__)).split('\\')[:-1])
-        file_path = os.path.join(base_dir, f'pictures\\{picture_name}')
+        file_dir = os.path.abspath(os.path.dirname(__file__))
+        base_dir = os.path.split(file_dir)[0]
+        file_path = os.path.join(base_dir, 'pictures')
+        file_path = os.path.join(file_path, 'teaser.png')
 
         data = {"width": 0, "height": 0}
         file = {'file': open(file_path, 'rb')}
