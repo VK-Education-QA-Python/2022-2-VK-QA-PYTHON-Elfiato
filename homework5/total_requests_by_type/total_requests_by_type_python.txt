@@ -1,0 +1,1 @@
+[{"method": "GET", "count": 122095}, {"method": "POST", "count": 102503}, {"method": "HEAD", "count": 528}, {"method": "PUT", "count": 6}]
