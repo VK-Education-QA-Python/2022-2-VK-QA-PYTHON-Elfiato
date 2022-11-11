@@ -24,9 +24,7 @@ class CreatingSegmentPage(BasePage):
 
     @allure.step("Ввод имени сегмента.")
     def input_name(self, name):
-        segment_name_field = self.get_present_element(*self.locators.SEGMENT_NAME_FORM)
-        segment_name_field.clear()
-        segment_name_field.send_keys(name)
+        self.input_text(*self.locators.SEGMENT_NAME_FORM, name)
 
     @allure.step("Нажатие кнопки создания сегмента.")
     def create_new_segment(self):

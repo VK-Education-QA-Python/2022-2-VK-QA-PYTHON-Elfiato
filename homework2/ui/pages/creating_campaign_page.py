@@ -17,15 +17,11 @@ class CreatingCampaignPage(BasePage):
 
     @allure.step("Ввод url.")
     def input_url(self, target_url):
-        url_field = self.get_present_element(*self.locators.URL_FIELD)
-        url_field.clear()
-        url_field.send_keys(target_url)
+        self.input_text(*self.locators.URL_FIELD, target_url)
 
     @allure.step("Ввод имени компании.")
     def input_campaign_name(self, campaign_name):
-        campaign_name_field = self.get_clickable_element(*self.locators.CAMPAIGN_NAME)
-        campaign_name_field.clear()
-        campaign_name_field.send_keys(f'{campaign_name}')
+        self.input_text(*self.locators.CAMPAIGN_NAME, campaign_name, self.get_clickable_element)
 
     @allure.step("Выбор социальной характеристики высшее образование.")
     def select_social_characteristics(self):
@@ -65,17 +61,12 @@ class CreatingCampaignPage(BasePage):
     def fill_teaser_fields(self, target_url, title, text):
         with allure.step("Ввод ссылки."):
             self.scroll_to_clickable_element(*self.locators.TEASER_LINK)
-            teaser_link = self.get_present_element(*self.locators.TEASER_LINK)
-            teaser_link.clear()
-            teaser_link.send_keys(target_url)
+            self.input_text(*self.locators.TEASER_LINK, target_url)
         with allure.step("Ввод названия."):
-            teaser_title = self.get_present_element(*self.locators.TEASER_TITLE)
-            teaser_title.clear()
-            teaser_title.send_keys(title)
+            self.input_text(*self.locators.TEASER_TITLE, title)
         with allure.step("Ввод текста."):
-            teaser_text = self.get_present_element(*self.locators.TEASER_TEXT)
-            teaser_text.clear()
-            teaser_text.send_keys(text)
+            self.input_text(*self.locators.TEASER_TEXT, text)
+
 
     @allure.step("Нажатие на кнопку создания кампании.")
     def save_campaign(self):

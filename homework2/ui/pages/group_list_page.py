@@ -11,9 +11,7 @@ class GroupListPage(BasePage):
 
     @allure.step("Ввод ссылки на группу.")
     def input_group_url(self, url):
-        input_field = self.get_visible_element(*self.locators.GROUP_URL_INPUT_FIELD)
-        input_field.clear()
-        input_field.send_keys(url)
+        self.input_text(*self.locators.GROUP_URL_INPUT_FIELD, url)
 
     @allure.step("Выбор всех групп в списке преложенных.")
     def select_all_group(self):

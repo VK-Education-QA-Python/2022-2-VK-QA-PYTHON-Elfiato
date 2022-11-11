@@ -12,11 +12,8 @@ class LoginPage(BasePage):
 
     @allure.step("Авторизация.")
     def login(self):
-        email_field = self.get_present_element(*self.locators.EMAIL_FIELD)
-        email_field.clear()
-        email_field.send_keys(self.__login)
-        password_field = self.get_present_element(*self.locators.PASSWORD_FIELD)
-        password_field.clear()
-        password_field.send_keys(self.__password)
+        self.input_text(*self.locators.EMAIL_FIELD, self.__login)
+        self.input_text(*self.locators.PASSWORD_FIELD, self.__password)
+
         self.get_present_element(*self.locators.LOGIN_BUTTON_IN_AUTHORIZATION_FORM).click()
         return DashBoardPage(driver=self.driver)

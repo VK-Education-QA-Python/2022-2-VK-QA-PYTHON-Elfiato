@@ -77,3 +77,10 @@ class BasePage(object):
     def open_page(self):
         logger.info(f'Opening page with url:{self.url}.')
         self.driver.get(self.url)
+
+    def input_text(self, how, what, text, element_type=None):
+        if element_type is None:
+            element_type = self.get_present_element
+        field = element_type(how, what)
+        field.clear()
+        field.send_keys(text)
