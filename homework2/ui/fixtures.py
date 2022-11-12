@@ -10,6 +10,10 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 from ui.pages.main_page import MainPage
 
+from ui.pages.dashboard_page import DashBoardPage
+from ui.pages.segments_page import SegmentsPage
+from ui.pages.group_list_page import GroupListPage
+
 from filelock import FileLock
 
 
@@ -96,3 +100,18 @@ def get_cookies(tmp_path_factory, worker_id, config):
             data = cookies(config)
             fn.write_text(json.dumps(data))
     return data
+
+
+@pytest.fixture
+def dashboard_page(driver):
+    return DashBoardPage(driver=driver)
+
+
+@pytest.fixture
+def segment_page(driver):
+    return SegmentsPage(driver=driver)
+
+
+@pytest.fixture
+def group_list_page(driver):
+    return GroupListPage(driver=driver)

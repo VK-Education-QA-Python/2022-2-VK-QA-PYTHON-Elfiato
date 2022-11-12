@@ -4,9 +4,6 @@ import allure
 import pytest
 from _pytest.fixtures import FixtureRequest
 from ui.pages.main_page import MainPage
-from ui.pages.dashboard_page import DashBoardPage
-from ui.pages.segments_page import SegmentsPage
-from ui.pages.group_list_page import GroupListPage
 
 
 class BaseCase:
@@ -51,7 +48,3 @@ class BaseCaseLogIn(BaseCase):
                 self.driver.add_cookie(cookie)
 
             self.driver.refresh()
-
-        self.dashboard_page: DashBoardPage = DashBoardPage(driver=driver)
-        self.segment_page: SegmentsPage = SegmentsPage(driver=driver)
-        self.group_list_page: GroupListPage = GroupListPage(driver=driver)

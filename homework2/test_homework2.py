@@ -3,6 +3,8 @@ import time
 import allure
 import pytest
 
+from _pytest.fixtures import FixtureRequest
+
 from base import BaseCaseLogIn
 
 
@@ -10,7 +12,7 @@ from base import BaseCaseLogIn
 class Test(BaseCaseLogIn):
     @allure.title("Тест на создание кампании.")
     @allure.description("Создание кампании с типом 'тизер' и проверка на то, что она появилась в списке кампаний.")
-    def test_make_campaign(self):
+    def test_make_campaign(self, request: FixtureRequest):
         campaign_name = 'QWERTY' + '_' + str(time.time())
         target_url = 'https://education.vk.campaign/'
         teaser_title = 'Qwadsfa'
@@ -19,7 +21,7 @@ class Test(BaseCaseLogIn):
                          f'campaign name - {campaign_name}, target url - {target_url}, '
                          f'teaser title - {teaser_title}, teaser text - {teaser_text}.')
         with allure.step("Открываем страницу с списком кампаний и проверяем, что она открыта."):
-            dashboard_page = self.dashboard_page
+            dashboard_page = request.getfixturevalue('dashboard_page')
             dashboard_page.is_opened()
         campaign_page = dashboard_page.go_to_creating_campaign_page()
         campaign_page.select_category_traffic()
@@ -38,9 +40,9 @@ class Test(BaseCaseLogIn):
 
     @allure.title("Тест на создание сегмента.")
     @allure.description("Создание сегмента с типом 'Приложения и игры в соцсетях' и проверка на то, что он создан.")
-    def test_create_segment(self):
+    def test_create_segment(self, request: FixtureRequest):
         with allure.step("Открываем страницу с списком сегментов."):
-            segment_page = self.segment_page
+            segment_page = request.getfixturevalue('segment_page')
             segment_page.open_page()
         creating_segment_page = segment_page.go_to_creating_segment_page()
         segment_name = creating_segment_page.create_segment(creating_segment_page.select_category_apps)
@@ -50,11 +52,11 @@ class Test(BaseCaseLogIn):
     @allure.title("Тест на создание сегмента.")
     @allure.description("Создание сегмента с типом 'Группы OK и VK' и проверка на то, что он создан, "
                         "затем удалить созданный сегмент и добавленный источник данных.")
-    def test_create_segment_with_group(self):
+    def test_create_segment_with_group(self, request: FixtureRequest):
         url = 'https://vk.com/vkedu'
         group_name = 'VK Образование'
         with allure.step("Открываем страницу Групп ОК и ВК."):
-            group_list_page = self.group_list_page
+            group_list_page = request.getfixturevalue('group_list_page')
             group_list_page.open_page()
         group_list_page.input_group_url(url)
         group_list_page.select_all_group()
@@ -62,7 +64,7 @@ class Test(BaseCaseLogIn):
         group_id = group_list_page.get_added_group_id(group_name)
 
         with allure.step("Переходим на страницу с списком сегментов."):
-            segment_page = self.segment_page
+            segment_page = request.getfixturevalue('segment_page')
             segment_page.open_page()
         creating_segment_page = segment_page.go_to_creating_segment_page()
         segment_name = creating_segment_page.create_segment(creating_segment_page.select_category_groups)
