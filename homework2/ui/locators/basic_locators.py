@@ -50,18 +50,15 @@ class SegmentsPageLocators:
 
 
 class CreatingSegmentLocators:
-    APPS_CATEGORY = (By.XPATH,
-                     "//div[text()='Приложения и игры в соцсетях' or text()='Apps and games in social networks']")
+    APPS_CATEGORY = (By.CSS_SELECTOR, '.adding-segments-item:nth-child(8)')
     SEGMENT_CHECKBOX = (By.CSS_SELECTOR, ".adding-segments-source__checkbox")
     SUBMIT_SEGMENT_BUTTON = (By.CSS_SELECTOR, ".adding-segments-modal__btn-wrap .button_submit")
     CREATE_NEW_SEGMENT_BUTTON = (By.CSS_SELECTOR, ".create-segment-form__btn-wrap .button_submit")
     SEGMENT_NAME_FORM = (By.CSS_SELECTOR, ".input_create-segment-form  input")
-    GROUPS_CATEGORY = (By.XPATH,
-                       "//div[text()='Группы ОК и VK' or text()='Groups OK and VKs']")
+    GROUPS_CATEGORY = (By.CSS_SELECTOR, '.adding-segments-item:nth-child(10)')
 
 
 class GroupListPageLocators:
-    GROUP_LIST_IN_LEFT_MENU = (By.XPATH, "//span[text()='Группы ОК и VK' or text()='Groups OK and VK']")
     GROUP_URL_INPUT_FIELD = (By.CSS_SELECTOR, ".segments-groups-ok-list__add-theme input")
     SELECT_ALL = (By.CSS_SELECTOR, "[data-test='select_all']")
     ADD_SELECTED_ITEMS_BUTTON = (By.CSS_SELECTOR, "[data-test='add_selected_items_button']")
