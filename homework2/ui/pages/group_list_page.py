@@ -37,6 +37,13 @@ class GroupListPage(BasePage):
 
     @allure.step("Удаление группы.")
     def remove_group(self, cid):
-        remove_button_selector = f"[cid='{cid}'] .icon-cross"
-        self.get_visible_element(By.CSS_SELECTOR, remove_button_selector).click()
+        self.locators.REMOVE_BUTTON_SELECTOR[1] = self.locators.REMOVE_BUTTON_SELECTOR[1].format(cid)
+        self.get_visible_element(*self.locators.REMOVE_BUTTON_SELECTOR).click()
         self.get_visible_element(*self.locators.SUBMIT_REMOVE_BUTTON).click()
+
+    @allure.step("Добавление группы.")
+    def add_group(self):
+        url = 'https://vk.com/vkedu'
+        self.input_group_url(url)
+        self.select_all_group()
+        self.click_add_selected_button()

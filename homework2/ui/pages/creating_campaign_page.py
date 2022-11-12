@@ -44,9 +44,9 @@ class CreatingCampaignPage(BasePage):
 
     @allure.step("Добавление изображения в объявление.")
     def add_picture(self):
-        project_dir = '\\'.join(
-            os.path.abspath(os.path.dirname(__file__)).split('\\')[:-1])
-        file_path = os.path.join(project_dir, 'pictures')
+        file_dir = os.path.abspath(os.path.dirname(__file__))
+        base_dir = os.path.split(file_dir)[0]
+        file_path = os.path.join(base_dir, 'pictures')
         file_path = os.path.join(file_path, 'teaser.png')
         try:
             self.scroll_to_clickable_element(*self.locators.SHOW_MEDIA_LIB_BUTTON)
@@ -67,8 +67,24 @@ class CreatingCampaignPage(BasePage):
         with allure.step("Ввод текста."):
             self.input_text(*self.locators.TEASER_TEXT, text)
 
-
     @allure.step("Нажатие на кнопку создания кампании.")
     def save_campaign(self):
         self.scroll_to_clickable_element(*self.locators.SUBMIT_BUTTON)
         self.get_clickable_element(*self.locators.SUBMIT_BUTTON).click()
+
+    def creating_campaign(self, campaign_name):
+        target_url = 'https://education.vk.campaign/'
+        teaser_title = 'Qwadsfa'
+        teaser_text = '1234153425234'
+        with allure.step(
+                f'Создание кампании с названием - {campaign_name}, url - {target_url}, '
+                f'названием тизера - {teaser_title}, текстом тизера - {teaser_text}.'):
+            self.select_category_traffic()
+            self.input_url(target_url)
+            self.input_campaign_name(campaign_name)
+            self.select_social_characteristics()
+            self.select_interests()
+            self.select_ad_format()
+            self.add_picture()
+            self.fill_teaser_fields(target_url, teaser_title, teaser_text)
+            self.save_campaign()

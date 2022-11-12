@@ -64,3 +64,4 @@ class GroupListPageLocators:
     ADD_SELECTED_ITEMS_BUTTON = (By.CSS_SELECTOR, "[data-test='add_selected_items_button']")
     ALL_ADDED_GROUPS = (By.CSS_SELECTOR, ".flexi-table__row")
     SUBMIT_REMOVE_BUTTON = (By.CSS_SELECTOR, ".button_confirm-remove")
+    REMOVE_BUTTON_SELECTOR = [By.CSS_SELECTOR, "[cid='{0}'] .icon-cross"]

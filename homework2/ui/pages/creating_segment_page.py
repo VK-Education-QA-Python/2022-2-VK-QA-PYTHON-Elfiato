@@ -22,10 +22,6 @@ class CreatingSegmentPage(BasePage):
     def click_submit_button(self):
         self.get_clickable_element(*self.locators.SUBMIT_SEGMENT_BUTTON).click()
 
-    @allure.step("Ввод имени сегмента.")
-    def input_name(self, name):
-        self.input_text(*self.locators.SEGMENT_NAME_FORM, name)
-
     @allure.step("Нажатие кнопки создания сегмента.")
     def create_new_segment(self):
         self.get_clickable_element(*self.locators.CREATE_NEW_SEGMENT_BUTTON).click()
@@ -39,6 +35,6 @@ class CreatingSegmentPage(BasePage):
         category()
         self.set_new_segment_checkbox_true()
         self.click_submit_button()
-        self.input_name(segment_name)
+        self.input_text(*self.locators.SEGMENT_NAME_FORM, segment_name)
         self.create_new_segment()
         return segment_name
