@@ -1,0 +1,1 @@
+echo Total requests by type > total_requests_by_type.txt; awk '{if (length($6) < 10) print substr($6, 2)}' ../access.log | sort | uniq -c | sort -nr | awk '{printf("%s - %s\n", $2, $1)}' >> total_requests_by_type.txt

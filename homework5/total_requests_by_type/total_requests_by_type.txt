@@ -1,0 +1,5 @@
+Total requests by type
+GET - 122095
+POST - 102503
+HEAD - 528
+PUT - 6

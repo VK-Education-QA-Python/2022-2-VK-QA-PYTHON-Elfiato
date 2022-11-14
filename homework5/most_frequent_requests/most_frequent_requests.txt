@@ -1,0 +1,21 @@
+Most frequent requests
+/administrator/index.php
+106288
+/apache-log/access.log
+26336
+/
+6967
+/templates/_system/css/general.css
+4980
+/robots.txt
+3199
+/favicon.ico
+2201
+/wp-login.php
+1648
+/administrator/
+1563
+/templates/jp_hotel/css/template.css
+1287
+/media/system/js/mootools.js
+1278
