@@ -1,35 +1,29 @@
 from api.client import ApiClient
+from api.builder import SegmentData
 
 
 class ApiSegments(ApiClient):
-    url = 'https://target-sandbox.my.com/api/v2/remarketing/segments.json'
+    segment_url = 'https://target-sandbox.my.com/api/v2/remarketing/segments.json'
+    segment_by_id_url = 'https://target-sandbox.my.com/api/v2/remarketing/segments/{0}.json'
 
-    def create_segment(self, segment_name, vk_group_id, object_type='remarketing_player'):
-        object_types_params = {'remarketing_player': {'type': 'positive',
-                                                      'left': '365',
-                                                      'right': '0'},
-                               'remarketing_vk_group': {'type': 'positive',
-                                                        'source_id': vk_group_id}}
-        data = {
-            'name': segment_name,
-            'pass_condition': 1,
-            'relations': [
-                {'object_type': object_type,
-                 'params': object_types_params[object_type]
-                 },
-            ]
-        }
+    def create_segment(self, vk_group_id, object_type='remarketing_player'):
+        data = SegmentData.get_segment_data(vk_group_id=vk_group_id, object_type=object_type)
         headers = {
             'X-CSRFToken': self.session.cookies['csrftoken'],
         }
-        res = self._request(method='POST', location=self.url, headers=headers, json=data, jsonify=True)
+        res = self._request(method='POST', location=self.segment_url, headers=headers, json=data, jsonify=True)
         return res['id']
 
     def get_created_segments(self):
         params = {
             'fields': 'id, name, created'
         }
-        return self._request(method='GET', location=self.url, params=params, jsonify=True)
+        return self._request(method='GET', location=self.segment_url, params=params, jsonify=True)
+
+    def is_segment(self, segment_id):
+        segment_link = self.segment_by_id_url.format(str(segment_id))
+        res = self._request(method='GET', location=segment_link)
+        return res.status_code == 200
 
     @staticmethod
     def is_created_object_in_objects_list(created_object_id, object_list):
@@ -39,15 +33,12 @@ class ApiSegments(ApiClient):
         return False
 
     def delete_segment(self, segment_id):
-        delete_segment_link = 'https://target-sandbox.my.com/api/v1/remarketing/mass_action/delete.json'
+        delete_segment_link = self.segment_by_id_url.format(str(segment_id))
 
-        data = [
-            {'source_id': segment_id, 'source_type': 'segment'}
-        ]
         headers = {
             'X-CSRFToken': self.session.cookies['csrftoken']
         }
-        self._request(method='POST', location=delete_segment_link, json=data, headers=headers)
+        self._request(method='DELETE', location=delete_segment_link, headers=headers)
 
     def get_group_id(self, group_link):
         get_group_id_link = 'https://target-sandbox.my.com/api/v2/vk_groups.json'
@@ -77,16 +68,8 @@ class ApiSegments(ApiClient):
         }
         return self._request(method='GET', location=vk_groups_link, params=params, jsonify=True)
 
-    def create_segment_with_type(self, segment_name, object_type='remarketing_player', group_id=None):
-        segment_id = self.create_segment(segment_name, vk_group_id=group_id, object_type=object_type)
-        created_segments = self.get_created_segments()
-        assert self.is_created_object_in_objects_list(segment_id, created_segments), \
-            f'Сегмента с ID {segment_id} нет в списке созданных сегментов.'
-
-        self.delete_segment(segment_id)
-        created_segments = self.get_created_segments()
-        assert not self.is_created_object_in_objects_list(segment_id, created_segments), \
-            f'Сегмент с ID {segment_id} есть в списке созданных сегментов после удаления.'
+    def create_segment_with_type(self, object_type='remarketing_player', group_id=None):
+        return self.create_segment(vk_group_id=group_id, object_type=object_type)
 
     def delete_group(self, group_id):
         delete_group_link = f'https://target-sandbox.my.com/api/v2/remarketing/vk_groups/{group_id}.json'

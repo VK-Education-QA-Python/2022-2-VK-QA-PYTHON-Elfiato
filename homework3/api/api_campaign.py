@@ -1,18 +1,19 @@
 import os
 
+from api.builder import CampaignTeaserData
 from api.client import ApiClient
 
 
 class ApiCampaign(ApiClient):
     url = 'https://target-sandbox.my.com/api/v2/campaigns.json'
+    campaign_by_id_url = 'https://target-sandbox.my.com/api/v2/campaigns/{0}.json'
 
     def post_picture(self, picture_name):
         send_picture_link = 'https://target-sandbox.my.com/api/v2/content/static.json'
 
-        file_dir = os.path.abspath(os.path.dirname(__file__))
-        base_dir = os.path.split(file_dir)[0]
-        file_path = os.path.join(base_dir, 'pictures')
-        file_path = os.path.join(file_path, 'teaser.png')
+        repo_root = os.path.split(os.path.abspath(os.path.dirname(__file__)))[0]
+        file_path = os.path.join(repo_root, 'pictures')
+        file_path = os.path.join(file_path, picture_name)
 
         data = {"width": 0, "height": 0}
         file = {'file': open(file_path, 'rb')}
@@ -30,44 +31,18 @@ class ApiCampaign(ApiClient):
         res = self._request(method='GET', location=send_target_link_url, params=params, jsonify=True)
         return res['id']
 
-    def get_campaign_data_json(self, campaign_name, target_url, teaser_title, teaser_text, picture):
-        target_url_id = self.post_target_url(target_url)
-        picture_id = self.post_picture(picture)
-        campaign_data = {"name": campaign_name,
-                         'package_id': '1029',
-                         'objective': "traffic",
-                         "banners": [
-                             {
-                                 "urls": {
-                                     "primary": {
-                                         "id": target_url_id}
-                                 },
-                                 "textblocks": {
-                                     "title_25": {
-                                         "text": teaser_title},
-                                     "text_90": {
-                                         "text": teaser_text},
-                                 },
-                                 "content": {
-                                     "image_90x75": {
-                                         "id": picture_id
-                                     }
-                                 },
-                             }
-                         ]}
+    def get_campaign_data_json(self):
+        teaser_data = CampaignTeaserData()
+        target_url_id = self.post_target_url(teaser_data.target_url)
+        picture_id = self.post_picture(teaser_data.picture_name)
+        campaign_data = teaser_data.get_campaign_data(target_url_id, picture_id)
         return campaign_data
 
-    def create_campaign_teaser(self, campaign_name):
-        target_url = 'https://education.vk.campaign/'
-        teaser_title = 'Qwadsfa'
-        teaser_text = '1234153425234'
-        picture_name = 'teaser.png'
-
+    def create_campaign_teaser(self):
         headers = {
             'X-CSRFToken': self.session.cookies['csrftoken'],
-            'X-Campaign-Create-Action': 'new',
         }
-        campaign_data = self.get_campaign_data_json(campaign_name, target_url, teaser_title, teaser_text, picture_name)
+        campaign_data = self.get_campaign_data_json()
 
         res = self._request(method='POST', location=self.url, headers=headers, json=campaign_data, jsonify=True)
         return res['id']
@@ -81,21 +56,23 @@ class ApiCampaign(ApiClient):
         res = self._request(method='GET', location=self.url, params=params, jsonify=True)
         return res
 
-    def delete_campaign(self, campaign_id):
-        mass_action_url = 'https://target-sandbox.my.com/api/v2/campaigns/mass_action.json'
+    def get_campaign(self, campaign_id, status='active'):
+        campaign_by_id_url = self.campaign_by_id_url.format(str(campaign_id))
 
-        data = [
-            {'id': campaign_id, 'status': 'deleted'},
-        ]
+        params = {
+            'fields': 'id, name, status',
+        }
+
+        res = self._request(method='GET', location=campaign_by_id_url, params=params, jsonify=True)
+
+        return res['status'] == status
+
+    def delete_campaign(self, campaign_id):
+        campaign_by_id_url = self.campaign_by_id_url.format(str(campaign_id))
+
         headers = {
             'X-CSRFToken': self.session.cookies['csrftoken'],
         }
-        res = self._request(method='POST', location=mass_action_url, json=data, headers=headers)
-        assert res.status_code == 204, f'При удалении созданной компании пришел код овтета {res.status_code}.'
 
-    @staticmethod
-    def is_created_campaign_in_campaigns_list(created_campaign_id, campaigns):
-        for campaign in campaigns['items']:
-            if campaign['id'] == created_campaign_id:
-                return True
-        return False
+        res = self._request(method='DELETE', location=campaign_by_id_url, headers=headers)
+        assert res.status_code == 204, f'При удалении созданной компании пришел код овтета {res.status_code}.'
