@@ -1,0 +1,1 @@
+echo Users with most count server error requests >users_with_server_error_requests.txt; awk '{if ($9 ~ /5../) print($1)}' ../access.log | sort | uniq -c | sort -nr | head -n 5 | awk '{printf("%s\n%s\n", $2, $1)}' >>users_with_server_error_requests.txt
