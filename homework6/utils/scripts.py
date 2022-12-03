@@ -1,28 +1,29 @@
 import os
 
 
-def get_log_file_path():
-    dir_path = os.path.dirname(__file__)
-    return os.path.join(dir_path, 'nginx.txt')
+class BaseScripts:
+    def __init__(self, filename):
+        file_path = self.get_log_file_path(filename)
+        with open(file_path, 'r') as f:
+            self.file = f.read().split('\n')[:-1]
 
+    @staticmethod
+    def get_log_file_path(filename):
+        dir_path = os.path.dirname(__file__)
+        return os.path.join(dir_path, filename)
 
-def total_requests():
-    file_path = get_log_file_path()
-    counter = 0
-    with open(file_path, 'r') as f:
-        for l in f:
+    def total_requests(self):
+        counter = 0
+        for l in self.file:
             arr = l.split()
             if arr[7].startswith('HTTP') and '/' in arr[6]:
                 counter += 1
-    return [counter]
+        return [counter]
 
-
-def most_frequent_requests(amount):
-    file_path = get_log_file_path()
-    base_url = 'http://almhuette-raith.at/'
-    url_dict = {}
-    with open(file_path, 'r') as f:
-        for l in f:
+    def most_frequent_requests(self, amount):
+        base_url = 'http://almhuette-raith.at/'
+        url_dict = {}
+        for l in self.file:
             arr = l.split()
             url = arr[6]
             if url.startswith(base_url):
@@ -32,14 +33,11 @@ def most_frequent_requests(amount):
             else:
                 url_dict[url] = 1
 
-    return sorted(url_dict.items(), key=lambda item: item[1], reverse=True)[:amount]
+        return sorted(url_dict.items(), key=lambda item: item[1], reverse=True)[:amount]
 
-
-def total_requests_by_type():
-    file_path = get_log_file_path()
-    type_dict = {}
-    with open(file_path, 'r') as f:
-        for line in f:
+    def total_requests_by_type(self):
+        type_dict = {}
+        for line in self.file:
             arr = line.split()
             type_name = arr[5].strip('"')
             if len(type_name) > 10:
@@ -49,15 +47,12 @@ def total_requests_by_type():
             else:
                 type_dict[type_name] = 1
 
-    return sorted(type_dict.items(), key=lambda item: item[1], reverse=True)
+        return sorted(type_dict.items(), key=lambda item: item[1], reverse=True)
 
-
-def largest_requests(amount):
-    file_path = get_log_file_path()
-    base_url = 'http://almhuette-raith.at/'
-    all_requests = []
-    with open(file_path, 'r') as f:
-        for line in f:
+    def largest_requests(self, amount):
+        base_url = 'http://almhuette-raith.at/'
+        all_requests = []
+        for line in self.file:
             arr = line.split()
             url = arr[6]
             if url.startswith(base_url):
@@ -70,14 +65,11 @@ def largest_requests(amount):
                     url = '%%'.join(url.split('%'))
                 all_requests.append((url, int(status), int(request_size), ip_address))
 
-    return sorted(all_requests, key=lambda item: (item[2], item[0]), reverse=True)[:amount]
+        return sorted(all_requests, key=lambda item: (item[2], item[0]), reverse=True)[:amount]
 
-
-def users_with_server_error_requests(amount):
-    file_path = get_log_file_path()
-    user_dict = {}
-    with open(file_path, 'r') as f:
-        for line in f:
+    def users_with_server_error_requests(self, amount):
+        user_dict = {}
+        for line in self.file:
             arr = line.split()
             status = arr[8]
             ip_address = arr[0]
@@ -87,4 +79,4 @@ def users_with_server_error_requests(amount):
                 else:
                     user_dict[ip_address] += 1
 
-    return sorted(user_dict.items(), key=lambda item: (item[1], item[0]), reverse=True)[:amount]
+        return sorted(user_dict.items(), key=lambda item: (item[1], item[0]), reverse=True)[:amount]

@@ -1,6 +1,6 @@
 import pytest
 from mysql.client import MySqlClient
-import utils.scripts as script
+from utils.scripts import BaseScripts
 from utils.builder import Builder
 import models.models as model
 
@@ -8,6 +8,7 @@ import models.models as model
 class MyTest:
     builder_name = Builder
     model = None
+    script = BaseScripts('nginx.txt')
 
     def prepare(self):
         pass
@@ -27,11 +28,11 @@ class TestTotalRequests(MyTest):
     model = model.TotalRequests
 
     def prepare(self):
-        self.builder.add_data(table=self.model, script=script.total_requests)
+        self.builder.add_data(table=self.model, script=self.script.total_requests)
 
     def test_total_requests(self):
         requests = self.get_results()
-        result = script.total_requests()
+        result = self.script.total_requests()
         assert len(requests) == 1, f'В таблице "{self.model.__tablename__}" содержится не {len(result)} запись.'
         assert requests[0].amount == result[0], f'Общее число запросов из файла "access.log" отличается от {result}.'
 
@@ -41,13 +42,14 @@ class TestMostFrequentRequests(MyTest):
     amount_of_result = 10
 
     def prepare(self):
-        self.builder.add_data(amount=self.amount_of_result, table=self.model, script=script.most_frequent_requests)
+        self.builder.add_data(amount=self.amount_of_result, table=self.model, script=self.script.most_frequent_requests)
 
     def test_total_requests(self):
         requests = self.get_results()
         assert len(
-            requests) == self.amount_of_result, f'В таблице "{self.model.__tablename__}" содержится не 10 записей.'
-        results = script.most_frequent_requests(self.amount_of_result)
+            requests) == self.amount_of_result, f'В таблице "{self.model.__tablename__}" содержится ' \
+                                                f'не {self.amount_of_result} записей.'
+        results = self.script.most_frequent_requests(self.amount_of_result)
         for i in range(len(requests)):
             if requests[i].url != results[i][0] or requests[i].amount != results[i][1]:
                 assert False, f'Значение с id - {requests[i].id} из таблицы {self.model.__tablename__} ' \
@@ -58,11 +60,11 @@ class TestTotalRequestsByType(MyTest):
     model = model.TotalRequestsByType
 
     def prepare(self):
-        self.builder.add_data(table=self.model, script=script.total_requests_by_type)
+        self.builder.add_data(table=self.model, script=self.script.total_requests_by_type)
 
     def test_total_requests(self):
         requests = self.get_results()
-        results = script.total_requests_by_type()
+        results = self.script.total_requests_by_type()
         assert len(requests) == len(
             results), f'В таблице "{self.model.__tablename__}" содержится не {len(results)} записей.'
         for i in range(len(requests)):
@@ -76,11 +78,11 @@ class TestLargestRequestsThatEndedWithClientError(MyTest):
     amount_of_result = 5
 
     def prepare(self):
-        self.builder.add_data(table=self.model, script=script.largest_requests, amount=self.amount_of_result)
+        self.builder.add_data(table=self.model, script=self.script.largest_requests, amount=self.amount_of_result)
 
     def test_total_requests(self):
         requests = self.get_results()
-        results = script.largest_requests(self.amount_of_result)
+        results = self.script.largest_requests(self.amount_of_result)
         assert len(requests) == len(
             results), f'В таблице "{self.model.__tablename__}" содержится не {len(results)} записей.'
         for i in range(len(requests)):
@@ -95,12 +97,12 @@ class TestUsersWithServerErrorRequests(MyTest):
     amount_of_result = 5
 
     def prepare(self):
-        self.builder.add_data(table=self.model, script=script.users_with_server_error_requests,
+        self.builder.add_data(table=self.model, script=self.script.users_with_server_error_requests,
                               amount=self.amount_of_result)
 
     def test_total_requests(self):
         requests = self.get_results()
-        results = script.users_with_server_error_requests(self.amount_of_result)
+        results = self.script.users_with_server_error_requests(self.amount_of_result)
         assert len(requests) == len(
             results), f'В таблице "{self.model.__tablename__}" содержится не {len(results)} записей.'
         for i in range(len(requests)):
