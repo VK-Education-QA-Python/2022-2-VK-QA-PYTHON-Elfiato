@@ -5,7 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, ElementNotInteractableException, \
     InvalidElementStateException
-from urls import app_url
+from app_urls import app_url
 
 logger = logging.getLogger('test')
 

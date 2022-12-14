@@ -3,7 +3,7 @@ import random
 
 import allure
 from api.client import ApiClient
-from urls import app_url
+from app_urls import app_url
 from utils.user_builder import UserBuilder
 
 

@@ -10,7 +10,7 @@ from db.client import MySqlClient
 from api.client import ApiClient
 
 from ui.fixtures import *
-from urls import app_url
+from app_urls import app_url
 
 
 @pytest.fixture(scope='function')

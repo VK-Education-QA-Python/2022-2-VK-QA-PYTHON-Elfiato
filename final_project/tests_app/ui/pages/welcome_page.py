@@ -2,7 +2,7 @@ import allure
 
 from ui.locators.basic_locators import WelcomePageLocators
 from ui.pages.base_page import BasePage, PageNotOpenedException
-from urls import app_url
+from app_urls import app_url
 
 
 class WelcomePage(BasePage):

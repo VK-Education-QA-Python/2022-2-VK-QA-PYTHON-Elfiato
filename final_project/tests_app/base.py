@@ -5,7 +5,7 @@ import pytest
 from _pytest.fixtures import FixtureRequest
 from db.client import MySqlClient
 from requests import request
-from urls import vk_id_url
+from app_urls import vk_id_url
 
 
 class BaseCase:

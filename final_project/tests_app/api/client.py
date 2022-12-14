@@ -1,5 +1,5 @@
 import requests
-from urls import app_url
+from app_urls import app_url
 import logging
 
 logger = logging.getLogger('test')

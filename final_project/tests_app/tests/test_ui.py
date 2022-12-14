@@ -4,7 +4,7 @@ import pytest
 from _pytest.fixtures import FixtureRequest
 
 from base import BaseCase, BaseCaseLogIn
-from urls import app_url
+from app_urls import app_url
 
 
 @pytest.mark.UI

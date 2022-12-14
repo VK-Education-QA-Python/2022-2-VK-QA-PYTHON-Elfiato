@@ -3,7 +3,7 @@ import allure
 from ui.locators.basic_locators import RegistrationPageLocators
 from ui.pages.base_page import BasePage
 from utils.user_builder import UserBuilder
-from urls import app_url
+from app_urls import app_url
 
 
 class RegistrationPage(BasePage):

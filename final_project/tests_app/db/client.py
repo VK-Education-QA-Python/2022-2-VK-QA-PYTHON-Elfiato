@@ -4,9 +4,9 @@ from sqlalchemy.orm import sessionmaker
 from db.models import User
 import logging
 import allure
+from app_urls import db_host, db_port
 
 logger = logging.getLogger('test')
-from urls import db_host, db_port
 
 
 class MySqlClient:
